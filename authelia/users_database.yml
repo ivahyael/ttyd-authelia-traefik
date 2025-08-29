@@ -1,0 +1,22 @@
+# Authelia Users Database
+# Generate password hash with:
+# docker run --rm authelia/authelia:latest authelia crypto hash generate argon2 --password 'your-password'
+
+users:
+  # Replace 'admin' with your desired username
+  admin:
+    displayname: "Administrator"
+    # IMPORTANT: Replace this with your generated hash
+    password: "$argon2id$GENERATE_YOUR_HASH"
+    email: admin@example.com
+    groups:
+      - admins
+      - dev
+  
+  # Example of additional user (uncomment and configure if needed)
+  # john:
+  #   displayname: "John Doe"
+  #   password: "$argon2id$GENERATE_YOUR_HASH"
+  #   email: john@example.com
+  #   groups:
+  #     - users
