@@ -1,6 +1,6 @@
 theme: dark
-jwt_secret: 014bc93ab0d12dfbe880fd35936e0fdb110c9dc3dd992cc473c457cfb336cd6a
-default_redirection_url: https://srv584424.hstgr.cloud/terminal
+jwt_secret: [insert your token here]
+default_redirection_url: https://${HOSTNAME}/terminal
 
 server:
   host: 0.0.0.0
@@ -24,15 +24,15 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    - domain: srv584424.hstgr.cloud
+    - domain: [insert your domain here]
       policy: one_factor
 
 session:
   name: authelia_session
-  secret: ddfa03b5d934a396ba4e0e8dbd5b4f7b6a4a2e2d48ac2aac329c842a55543938
+  secret: [insert token here]
   expiration: 1h
   inactivity: 5m
-  domain: srv584424.hstgr.cloud
+  domain: ${HOSTNAME}
 
 regulation:
   max_retries: 5
@@ -40,7 +40,7 @@ regulation:
   ban_time: 12h
 
 storage:
-  encryption_key: b6d0be7ce02d9bdd9a896d746ad3d0493a438aad8a2257f689d69ffcbacba30e
+  encryption_key: [insert generated key here]
   local:
     path: /config/db.sqlite3
 
