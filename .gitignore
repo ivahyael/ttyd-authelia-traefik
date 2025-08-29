@@ -1,0 +1,31 @@
+
+# Environment variables
+
+.env
+
+# Authelia sensitive runtime files
+
+authelia/db.sqlite3
+
+authelia/notification.txt
+
+authelia/users_database.yml
+
+# SSL certificates
+
+letsencrypt/
+
+acme.json
+
+# System files
+
+.DS_Store
+
+*.swp
+
+.build.log
+
+# SSH keys
+
+.ssh/
+

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v3.0
+    restart: unless-stopped
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+  authelia:
+    image: authelia/authelia:latest
+    restart: unless-stopped
+    volumes:
+      - ./authelia:/config
+    expose:
+      - 9091
+    labels:
+      - "traefik.enable=true"
+      # Authelia gets the root domain
+      - "traefik.http.routers.authelia.rule=Host(`srv584424.hstgr.cloud`) && PathPrefix(`/`)"
+      - "traefik.http.routers.authelia.entrypoints=websecure"
+      - "traefik.http.routers.authelia.tls=true"
+      - "traefik.http.routers.authelia.tls.certresolver=myresolver"
+      - "traefik.http.routers.authelia.priority=10"
+      - "traefik.http.services.authelia.loadbalancer.server.port=9091"
+      # ForwardAuth middleware
+      - "traefik.http.middlewares.authelia-auth.forwardauth.address=http://authelia:9091/api/verify?rd=https://srv584424.hstgr.cloud/"
+      - "traefik.http.middlewares.authelia-auth.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.authelia-auth.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+
+  ttyd:
+    image: twistedsisters/ttyd-traefik:latest
+    restart: unless-stopped
+    command: ttyd -W -p 7681 bash
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ttyd.rule=Host(`srv584424.hstgr.cloud`) && PathPrefix(`/terminal`)"
+      - "traefik.http.routers.ttyd.entrypoints=websecure"
+      - "traefik.http.routers.ttyd.tls=true"
+      - "traefik.http.routers.ttyd.tls.certresolver=myresolver"
+      - "traefik.http.routers.ttyd.priority=100"
+      - "traefik.http.middlewares.ttyd-strip.stripprefix.prefixes=/terminal"
+      - "traefik.http.routers.ttyd.middlewares=authelia-auth,ttyd-strip"
+      - "traefik.http.services.ttyd.loadbalancer.server.port=7681"
+
+    volumes:
+      - ~/.ssh:/root/.ssh:ro

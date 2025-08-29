@@ -1,0 +1,49 @@
+theme: dark
+jwt_secret: 014bc93ab0d12dfbe880fd35936e0fdb110c9dc3dd992cc473c457cfb336cd6a
+default_redirection_url: https://srv584424.hstgr.cloud/terminal
+
+server:
+  host: 0.0.0.0
+  port: 9091
+ # path: authelia  # Add this line
+
+log:
+  level: info
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2id
+      iterations: 1
+      key_length: 32
+      salt_length: 16
+      memory: 1024
+      parallelism: 8
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: srv584424.hstgr.cloud
+      policy: one_factor
+
+session:
+  name: authelia_session
+  secret: ddfa03b5d934a396ba4e0e8dbd5b4f7b6a4a2e2d48ac2aac329c842a55543938
+  expiration: 1h
+  inactivity: 5m
+  domain: srv584424.hstgr.cloud
+
+regulation:
+  max_retries: 5
+  find_time: 10m
+  ban_time: 12h
+
+storage:
+  encryption_key: b6d0be7ce02d9bdd9a896d746ad3d0493a438aad8a2257f689d69ffcbacba30e
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
