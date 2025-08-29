@@ -1,6 +1,19 @@
 # ttyd-authelia-traefik
 A secure, browser-based terminal using ttyd, Traefik reverse proxy, and Authelia authentication.
 
+<p align="center">
+  <a href="https://hub.docker.com/r/twistedsisters/ttyd-traefik">
+    <img src="https://img.shields.io/badge/Docker%20Hub-twistedsisters%2Fttyd--traefik-2496ED?style=flat&logo=docker&logoColor=white" alt="Docker Hub">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/ivahyael/ttyd-authelia-traefik/main/docker-compose.yml">
+    <img src="https://assets.hostinger.com/vps/deploy.svg" alt="Deploy on Hostinger"/>
+  </a>
+</p>
+
+
 ## Features
 
 - 🖥️ **Browser-based terminal** - Access a containerized terminal directly from your web browser.
@@ -9,6 +22,7 @@ A secure, browser-based terminal using ttyd, Traefik reverse proxy, and Authelia
 - 🐳 **Fully containerized** - Easy deployment with Docker Compose
 - 🔄 **Auto-restart** - Services automatically restart on failure
 - ⏱️ **Session timeout** - Configurable session expiration for security
+
 
 ## Architecture
 
@@ -350,10 +364,3 @@ Contributions are welcome! Please:
 ---
 
 **Security Notice**: This setup provides web access to a terminal with limited system privileges. Ensure you understand the security implications and follow best practices for authentication and network security.
-
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-twistedsisters%2Fttyd--traefik-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/twistedsisters/ttyd-traefik)
-
-<a href="https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/ivahyael/ttyd-authelia-traefik/main/docker-compose.yml">
-  <img src="https://assets.hostinger.com/vps/deploy.svg" alt="Deploy on Hostinger"/>
-</a>
-
