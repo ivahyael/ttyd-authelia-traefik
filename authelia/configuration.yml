@@ -1,14 +1,18 @@
+# Authelia Configuration Template
+# Generate secrets with: openssl rand -hex 32
+
 theme: dark
-jwt_secret: [insert your token here]
-default_redirection_url: https://${HOSTNAME}/terminal
+default_redirection_url: https://${HOSTNAME}/terminal/
 
 server:
-  host: 0.0.0.0
-  port: 9091
- # path: authelia  # Add this line
+  address: tcp://0.0.0.0:9091
 
 log:
   level: info
+
+identity_validation:
+  reset_password:
+    jwt_secret: GENERATE_64_CHAR_SECRET_HERE
 
 authentication_backend:
   file:
@@ -24,15 +28,16 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    - domain: [insert your domain here]
+    - domain: ${HOSTNAME}
       policy: one_factor
 
 session:
-  name: authelia_session
-  secret: [insert token here]
-  expiration: 1h
-  inactivity: 5m
-  domain: ${HOSTNAME}
+  secret: GENERATE_64_CHAR_SECRET_HERE
+  cookies:
+    - domain: ${HOSTNAME}
+      authelia_url: https://${HOSTNAME}/
+      expiration: 1h
+      inactivity: 5m
 
 regulation:
   max_retries: 5
@@ -40,7 +45,7 @@ regulation:
   ban_time: 12h
 
 storage:
-  encryption_key: [insert generated key here]
+  encryption_key: GENERATE_64_CHAR_SECRET_HERE
   local:
     path: /config/db.sqlite3
 
